@@ -173,6 +173,52 @@ El último paso es verificar la instalación:
 
 El comando anterior imprimirá la versión, los comandos y los argumentos del compositor.
 
+## Como Instalar Adminer
 
+
+### Paso 1
+Necesitamos instalar apache2 y mysql-server a menos que lo esté instalando en un servidor web existente.
+
+Actualizar y actualizar el servidor
+
+'sudo apt update && sudo apt upgrade -y'
+
+Instale el servidor Apache, PHP y MYSQL y algunas extensiones de PHP
+
+sudo apt install apache2 php php-curl php-cli php-mysql php-gd mysql-client mysql-server -y
+Asegure su instalación de MySQL y establezca la contraseña de root
+
+'sudo mysql_secure_installation'
+
+Desde aquí, solo puede presionar Y y luego ENTER para aceptar los valores predeterminados para todas las preguntas subsiguientes.
+
+Puede configurar el usuario root para que use la contraseña mysql_native_password en su lugar para solucionar este problema, y tendremos que configurar la contraseña de root nuevamente para corregirlo.
+
+Inicie sesión como sudo en mysql utilizando el nombre de usuario y la contraseña establecidos anteriormente.
+
+'sudo mysql -u root'
+
+en MySQL ingrese lo siguiente
+
+'USE mysql;
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+Nota:
+Por seguridad, haga que esta contraseña sea diferente a la contraseña de su servidor y no use al usuario root en ninguna aplicación que requiera una base de datos para almacenar y extraer datos.
+
+FLUSH PRIVILEGES;
+exit;'
+### Paso 2
+Descargamos el Adminer más reciente en nuestra carpeta raíz de servidores web Apache
+
+'sudo mkdir /usr/share/adminer'
+'sudo wget "http://www.adminer.org/latest.php" -O /usr/share/adminer/latest.php'
+'sudo ln -s /usr/share/adminer/latest.php /usr/share/adminer/adminer.php'
+'echo "Alias /adminer.php /usr/share/adminer/adminer.php" | sudo tee /etc/apache2/conf-available/adminer.conf'
+'sudo a2enconf adminer.conf'
+recarga la configuracion de apache
+
+'sudo systemctl reload apache2'
+Eso es acceder a la interfaz de administrador en
+'http://<Server_IP_or_Domain>/adminer.php'
 
 
