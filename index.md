@@ -202,7 +202,7 @@ en MySQL ingrese lo siguiente
 
 'USE mysql;
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
-Nota:
+
 Por seguridad, haga que esta contraseña sea diferente a la contraseña de su servidor y no use al usuario root en ninguna aplicación que requiera una base de datos para almacenar y extraer datos.
 
 FLUSH PRIVILEGES;
@@ -210,15 +210,63 @@ exit;'
 ### Paso 2
 Descargamos el Adminer más reciente en nuestra carpeta raíz de servidores web Apache
 
-'sudo mkdir /usr/share/adminer'
-'sudo wget "http://www.adminer.org/latest.php" -O /usr/share/adminer/latest.php'
-'sudo ln -s /usr/share/adminer/latest.php /usr/share/adminer/adminer.php'
-'echo "Alias /adminer.php /usr/share/adminer/adminer.php" | sudo tee /etc/apache2/conf-available/adminer.conf'
-'sudo a2enconf adminer.conf'
-recarga la configuracion de apache
+'sudo mkdir /usr/share/adminer'.
+'sudo wget "http://www.adminer.org/latest.php" -O /usr/share/adminer/latest.php'.
+'sudo ln -s /usr/share/adminer/latest.php /usr/share/adminer/adminer.php'.
+'echo "Alias /adminer.php /usr/share/adminer/adminer.php" | sudo tee /etc/apache2/conf-available/adminer.conf'.
+'sudo a2enconf adminer.conf'.
+
+Recarga la configuracion de apache
 
 'sudo systemctl reload apache2'
 Eso es acceder a la interfaz de administrador en
 'http://<Server_IP_or_Domain>/adminer.php'
+
+
+## Instalar GoAccess
+
+### Paso 1
+
+La primera alternativa, la cual usaremos en este tutorial, es a través del recurso oficial de GoAccess, para ello, descargaremos la última versión de GoAccess usando el comando wget de la siguiente forma:
+'wget http://tar.goaccess.io/goaccess-1.2.tar.gz'
+
+### Paso 2
+
+Procedemos a extraer el archivo descargado ejecutando:
+'sudo tar -xzvf goaccess-1.2.tar.gz'
+
+### Paso 3
+
+Ahora, cambiaremos el directorio a goaccess-1.2 y compilaremos GoAccess ejecutando el siguiente comando:
+'cd goaccess-1.2'
+'sudo ./configure --enable-utf8 --enable-geoip=legacy'
+ 
+### Paso 4
+
+Ahora ejecutamos:
+sudo make
+
+### Paso 5
+
+Finalmente instalamos GoAccess ejecutando:
+sudo make install
+
+### Paso 6
+
+La segunda alternativa para instalar GoAccess es a través de un repositorio, para ello será necesario descargar el repositorio de GoAccess usando apt con el siguiente comando:
+echo "deb http://deb.goaccess.io/ $(lsb_release -cs) main" | sudo tee -a /etc/apt/sources.list.d/goaccess.list
+wget -O - https://deb.goaccess.io/gnugpg.key | sudo apt-key add –
+
+### Paso 7
+
+Luego, actualizaremos el repositorio usando el siguiente comando:
+sudo apt-get update -y
+### Paso 8
+
+Finalmente, instalamos GoAccess ejecutando:
+'sudo apt-get install goaccess -y' 
+
+
+
 
 
