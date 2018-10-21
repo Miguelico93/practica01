@@ -97,34 +97,81 @@ Luego agregue ServerName y ServerAlias para que coincidan con su nombre de domin
 </VirtualHost>'
 Después de que reinicie Apache2.
 
-sudo systemctl restart apache2.service
+'sudo systemctl restart apache2.service'
 
 Paso 4: Instale PHP Y Módulos Relacionados
 Ejecute los comandos a continuación para instalar PHP y los módulos PHP relacionados.
 
-sudo apt-get install php php-cgi libapache2-mod-php php-common php-pear php-mbstring
+'sudo apt-get install php php-cgi libapache2-mod-php php-common php-pear php-mbstring'
 
 Paso 5: Configurar Apache2 Para Usar PHP
 Después de instalar PHP y otros scripts relacionados, ejecute los siguientes comandos para permitir que Apache2 use PHP.
 
-sudo a2enconf php7.2-cgi
+'sudo a2enconf php7.2-cgi'
 
 Recargar apache2
 
-sudo systemctl reload apache2.service
+'sudo systemctl reload apache2.service'
 
 Paso 6: Instalar PhpMyAdmin
 Ahora que Apache2 y PHP están instalados, el último paso es instalar phpMyAdmin y configurar. Para hacer eso, ejecute los siguientes comandos
 
-sudo apt-get install phpmyadmin php-gettext
+'sudo apt-get install phpmyadmin php-gettext'
 
 Cuando se le solicite que elija el servidor web, seleccione apache2 y continúe.
-
 Cuando se le solicite nuevamente, permitir que debconfig-common instale una base de datos y configure seleccionar No.
-
 Después de la instalación, ejecute los comandos a continuación para iniciar sesión en el servidor de la base de datos para habilitar el inicio de sesión raíz de phpMyAdmin.
-
 Ahora, abra su navegador web e inicie sesión en el nombre de host o la dirección IP del servidor seguido de phpmyadmin
+
+## Instalación de composer.
+
+Instalando compositor
+Para instalar Composer en su sistema Ubuntu, siga estos pasos:
+
+Antes de descargar e instalar Composer, primero actualice el índice de paquetes e instale los requisitos necesarios:
+
+'sudo apt update'
+'sudo apt install wget php-cli php-zip unzip'
+
+Ahora que tenemos instalado php cli en nuestra máquina, podemos descargar el instalador del compositor con:
+
+'php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"'
+
+El comando anterior descargará el composer-setup.phparchivo en el directorio de trabajo actual.
+
+A continuación, debemos verificar la integridad de los datos del script comparando el SHA-384hash del script con el último hash del instalador que se encuentra en la página de Firmas / claves públicas del editor .
+
+Usaremos el siguiente comando wget para descargar la firma esperada del último instalador de Composer desde la página de Github del Compositor y almacenarla en una variable llamada HASH:
+
+'HASH="$(wget -q -O - https://composer.github.io/installer.sig)"'
+
+Ahora ejecute el siguiente comando para verificar que el script de instalación no esté dañado:
+
+'php -r "if (hash_file('SHA384', 'composer-setup.php') === '$HASH') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"'
+
+Si los hashes coinciden, verá la siguiente salida:
+
+'Installer verified'
+
+Si los hashes no coinciden verás Installer corrupt. En este caso, deberá volver a descargar el script de instalación de Composer y volver a verificar el valor de la $HASHvariable con echo $HASH. Una vez que se verifique el instalador, puede continuar con el siguiente paso.
+
+El siguiente comando instalará Composer en el /usr/local/bindirectorio:
+
+'sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer'
+
+All settings correct for using Composer
+'Downloading...'
+
+Composer (version 1.7.2) successfully installed to: /usr/local/bin/composer
+'Use it: php /usr/local/bin/composer'
+
+Se composerinstala como un comando de todo el sistema y estará disponible para todos los usuarios.
+
+El último paso es verificar la instalación:
+
+'composer'
+
+El comando anterior imprimirá la versión, los comandos y los argumentos del compositor.
 
 
 
