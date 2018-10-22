@@ -1,4 +1,7 @@
 # practica01
+
+
+
 ## Instalacion de pila LAMP 
 ### Instalación de Ubuntu Server
 Lo primero que haremos sera instalar una maquina de ubuntu server y cuando la tengamos actualizaremos el sistema con el comando: `apt update` para descargar las actualizaciones y despues `apt upgrade` para hacer la instalacion de la actualización.
@@ -292,7 +295,7 @@ goaccess /var/log/apache2/access.log -o /var/www/html/stats/index.html --log-for
 Creamos el archivo de contraseñas para el usuario que accederá al directorio stats. El archivo de contraseñas lo guardamos en un directorio seguro. En nuestro caso lo podemos guardar en /home/usuario
 
 ```
-htpasswd -c /var/www/htpasswd/hostname inda
+htpasswd -c /var/www/htpasswd/hostname miguel
 ```
 
 ### Paso 4
@@ -310,7 +313,7 @@ El contenido del archivo .htaccess será el siguiente:
 AuthType Basic
 AuthName "Acceso Restringido"
 AuthUserFile /var/www/htpasswd/hostname
-Require user inda
+Require user miguel
 </Directory>
 ```
 
