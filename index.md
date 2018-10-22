@@ -267,6 +267,81 @@ Finalmente, instalamos GoAccess ejecutando:
 'sudo apt-get install goaccess -y' 
 
 
+## Control de acceso a un directorio con .htaccess
+
+Creamos un directorio llamado stats dentro del directorio /var/www/html. El acceso a este directorio deberá estar controlado y solo se podrá acceder mediante un usuario y una contraseña.
+
+### Paso 1
+
+Creamos el directorio stats
+
+```
+mkdir /var/www/html/stats
+```
+
+### Paso 2
+
+Lanzamos el proceso de goaccess en background para generar los informes en segundo plano
+
+```
+goaccess /var/log/apache2/access.log -o /var/www/html/stats/index.html --log-format=COMBINED --real-time-html &
+```
+
+### Paso 3
+
+Creamos el archivo de contraseñas para el usuario que accederá al directorio stats. El archivo de contraseñas lo guardamos en un directorio seguro. En nuestro caso lo podemos guardar en /home/usuario
+
+```
+htpasswd -c /var/www/htpasswd/hostname inda
+```
+
+### Paso 4
+
+Creamos el archivo .htaccess en el directorio que queremos proteger con usuario y contraseña. En nuestro caso lo vamos a crear en el directorio /var/www/html/stats/.htaccess
+
+```
+/var/www/html/stats/.htaccess
+```
+
+El contenido del archivo .htaccess será el siguiente:
+
+```
+<Directory /var/www/htpasswd/logs>
+AuthType Basic
+AuthName "Acceso Restringido"
+AuthUserFile /var/www/htpasswd/hostname
+Require user inda
+</Directory>
+```
+
+### Paso 5
+
+Editamos el archivo configuración de Apache
+
+```
+nano /etc/apache2/sites-enabled/000-default.conf
+```
+
+Añadimos la siguiente sección dentro de las etiquetas de <VirtualHost *:80> y </VirtualHost>
+
+
+```
+<Directory "/var/www/html/stats">
+  Options Indexes FollowSymLinks
+  AllowOverride All
+  Require all granted
+</Directory>
+```
+
+### Paso 6
+
+Reiniciamos el servicio de Apache
+
+```
+`systemctl restart apache2
+```
+
+
 
 
 
